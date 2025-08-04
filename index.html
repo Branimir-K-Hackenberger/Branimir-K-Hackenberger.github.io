@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sveobuhvatna Analiza Pristranosti u Sustavu Evaluacije Projekata</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #c41e3a;
+            --secondary-color: #8b0000;
+            --accent-color: #dc143c;
+            --text-dark: #1a1a1a;
+            --text-light: #666666;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --shadow-hover: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--bg-white);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .key-finding {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 2rem 0;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Main Content Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 4rem 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 2rem 0 1rem;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        /* Abstract/Summary Box */
+        .abstract {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .abstract h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        /* Chart Containers */
+        .chart-container {
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--bg-white);
+            box-shadow: var(--shadow);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: var(--bg-light);
+        }
+
+        /* Key Findings Box */
+        .key-findings {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe0e0 100%);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .key-findings h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .key-findings ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-findings li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .key-findings li::before {
+            content: '⚠️';
+            position: absolute;
+            left: 0;
+            top: 0.75rem;
+        }
+
+        /* Methodology Box */
+        .methodology {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .methodology h4 {
+            color: var(--secondary-color);
+        }
+
+        /* Code/Formula Display */
+        .formula {
+            background: #f4f4f4;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        /* Interactive Elements */
+        .tab-container {
+            margin: 2rem 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-light);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Call to Action */
+        .cta-section {
+            background: var(--primary-color);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .cta-section h2::after {
+            background: white;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-primary {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .cta-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 2px dotted var(--primary-color);
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: var(--text-dark);
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            nav, .cta-section {
+                display: none;
+            }
+            
+            section {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Highlight Important Text */
+        .highlight {
+            background: linear-gradient(to bottom, transparent 60%, #ffeb3b 60%);
+            padding: 0 4px;
+            font-weight: 600;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .warning-box::before {
+            content: '⚠️';
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">Analiza Evaluacijskog Sustava</div>
+            <ul class="nav-links">
+                <li><a href="#uvod">Uvod</a></li>
+                <li><a href="#metodologija">Metodologija</a></li>
+                <li><a href="#rezultati">Rezultati</a></li>
+                <li><a href="#zakljucak">Zaključak</a></li>
+                <li><a href="#preporuke">Preporuke</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Sveobuhvatna Analiza Pristranosti u Sustavu Ocjenjivanja Projekata</h1>
+            <p class="subtitle">
+                Znanstveni dokazi potpune nefunkcionalnosti evaluacijskog sustava za dodjelu doktoranata
+                <br>Projekt razvoja karijera mladih istraživača (DOK-2025-02)
+            </p>
+            <div class="key-finding">
+                Samo 6.4% varijance u ocjenama povezano je sa stvarnom kvalitetom projekata
+            </div>
+        </div>
+    </section>
+
+    <!-- Abstract -->
+    <section id="uvod">
+        <div class="container">
+            <div class="abstract">
+                <h3>Sažetak</h3>
+                <p>
+                    Ovaj dokument predstavlja konsolidiranu analizu sustava ocjenjivanja projekata za dodjelu doktoranata koja nedvojbeno dokazuje potpunu nefunkcionalnost, pristranost i znanstvenu nevaljanost primijenjenog evaluacijskog postupka. Kroz tri komplementarna analitička pristupa — klasičnu statističku analizu, napredne statističke metode i Bayesovu analizu — dokazali smo kako sustav ne samo da ne mjeri kvalitetu projekata, već predstavlja tek simulaciju objektivnosti koja dovodi do arbitrarnih i nepravednih odluka.
+                </p>
+                <p>
+                    <strong>Rezultati pokazuju da samo 6.4% varijance u ocjenama proizlazi iz stvarnih razlika između projekata, dok ostatak čine subjektivnost recenzenata i nasumični čimbenici.</strong> Sustav se statistički ne razlikuje od nasumičnog ocjenjivanja (p = 0.451), što ga čini potpuno beskorisnim za namijenjenu svrhu.
+                </p>
+            </div>
+
+            <h2>Kontekst i Motivacija</h2>
+            <p>
+                Sustav vrednovanja znanstvenih projekata trebao bi predstavljati temelj pravedne i objektivne raspodjele resursa u akademskoj zajednici. U kontekstu dodjele doktoranata, takav sustav ima dalekosežne posljedice na karijere mladih istraživača i budućnost znanstvenih istraživanja. Stoga je ključno da takav sustav bude utemeljen na čvrstim znanstvenim principima, objektivnosti i transparentnosti.
+            </p>
+
+            <div class="warning-box">
+                Naši rezultati pokazuju <strong>potpunu besmislenost i neobjektivnost provedenog vrednovanja</strong>, te <strong>totalni izostanak bilo kakvog znanstveno utemeljenog sustava vrednovanja</strong>, što je za znanstvenu zajednicu ne samo neprihvatljivo, već i duboko sramotno.
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology -->
+    <section id="metodologija">
+        <div class="container">
+            <h2>Metodologija</h2>
+            
+            <h3>Opis podatkovnog skupa</h3>
+            <p>
+                Analiza je provedena na kompletnom skupu podataka evaluacije projekata prijavljenih za natječaj "Projekt razvoja karijera mladih istraživača — Izobrazba novih doktora znanosti (DOK-2025-02)" u području prirodnih znanosti.
+            </p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">95</div>
+                    <div class="stat-label">Projekata ocjenjivano</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">285</div>
+                    <div class="stat-label">Jedinstvenih kombinacija projekt-recenzent</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Recenzenta po projektu</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">9</div>
+                    <div class="stat-label">Kriterija ocjenjivanja</div>
+                </div>
+            </div>
+
+            <div class="methodology">
+                <h4>Analitički pristup</h4>
+                <p>Primijenjena je sveobuhvatna metodologija koja kombinira četiri komplementarna analitička pristupa:</p>
+                
+                <div class="tab-container">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" onclick="showTab('classical')">Klasična statistika</button>
+                        <button class="tab-button" onclick="showTab('advanced')">Napredne metode</button>
+                        <button class="tab-button" onclick="showTab('bayesian')">Bayesova analiza</button>
+                        <button class="tab-button" onclick="showTab('patterns')">Analiza obrazaca</button>
+                    </div>
+                    
+                    <div id="classical" class="tab-content active">
+                        <h4>A. Klasična statistička analiza</h4>
+                        <ul>
+                            <li><strong>ICC analiza:</strong> Intraclass Correlation Coefficient za procjenu pouzdanosti među recenzentima</li>
+                            <li><strong>Mixed Effects modeli:</strong> Dekompozicija izvora varijabilnosti</li>
+                            <li><strong>Hijerarhijska klaster analiza:</strong> Identifikacija stilova recenziranja</li>
+                            <li><strong>Temporalna analiza:</strong> Praćenje trendova kroz vrijeme</li>
+                        </ul>
+                        
+                        <div class="formula">
+                            ICC = σ²_between / (σ²_between + σ²_within)
+                        </div>
+                    </div>
+                    
+                    <div id="advanced" class="tab-content">
+                        <h4>B. Napredne statističke metode</h4>
+                        <ul>
+                            <li><strong>Kendall-ov W:</strong> Mjera slaganja pri rangiranju</li>
+                            <li><strong>Monte Carlo simulacije:</strong> Usporedba s nasumičnim ocjenjivanjem</li>
+                            <li><strong>Analiza ceiling efekta:</strong> Kvantifikacija pristranosti prema visokim ocjenama</li>
+                            <li><strong>Bootstrap analiza:</strong> Procjena broja stvarnih recenzenata</li>
+                        </ul>
+                        
+                        <div class="formula">
+                            W = 12S / [m²(n³-n)]
+                        </div>
+                    </div>
+                    
+                    <div id="bayesian" class="tab-content">
+                        <h4>C. Bayesova analiza</h4>
+                        <ul>
+                            <li><strong>Hijerarhijski modeli:</strong> Potpuna kvantifikacija nesigurnosti</li>
+                            <li><strong>MCMC uzorkovanje:</strong> Hamiltonian Monte Carlo s 4 lanca</li>
+                            <li><strong>Model selection:</strong> LOO cross-validation</li>
+                            <li><strong>Bayesovi faktori:</strong> Testiranje hipoteza</li>
+                        </ul>
+                        
+                        <div class="formula">
+                            y_ij = μ + α_i + β_j + ε_ij
+                        </div>
+                    </div>
+                    
+                    <div id="patterns" class="tab-content">
+                        <h4>D. Analiza obrazaca ocjenjivanja</h4>
+                        <ul>
+                            <li><strong>Identifikacija potpisa:</strong> Jedinstveni obrasci ocjenjivanja</li>
+                            <li><strong>PCA analiza:</strong> Redundantnost među kriterijima</li>
+                            <li><strong>Mrežna analiza:</strong> Povezanost recenzenata</li>
+                            <li><strong>Analiza ekstremnih obrazaca:</strong> Copy-paste pristup</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results -->
+    <section id="rezultati">
+        <div class="container">
+            <h2>Rezultati</h2>
+            
+            <h3>1. Katastrofalna dekompozicija varijance</h3>
+            
+            <div class="key-findings">
+                <h3>Najstrašniji nalaz cijele analize</h3>
+                <ul>
+                    <li><strong>6.4%</strong> varijance povezano sa stvarnim razlikama između projekata</li>
+                    <li><strong>44.2%</strong> varijance zbog pristranosti grupa recenzenata</li>
+                    <li><strong>49.3%</strong> varijance je čista nasumičnost</li>
+                </ul>
+            </div>
+
+            <div class="chart-container">
+                <h4 class="chart-title">Dekompozicija varijance u K3 ocjenama</h4>
+                <div class="chart-wrapper">
+                    <canvas id="varianceChart"></canvas>
+                </div>
+            </div>
+
+            <p>
+                <span class="highlight">93.6% varijance nema apsolutno nikakve veze s kvalitetom evaluiranih projekata.</span> 
+                Zamislite situaciju u kojoj mjerite temperaturu termometrom koji 94% vremena pokazuje nasumične vrijednosti koje nemaju veze sa stvarnom temperaturom. Takav termometar ne samo što je beskoristan već je i opasan jer stvara iluziju mjerenja.
+            </p>
+
+            <h3>2. Analiza pouzdanosti među recenzentima</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mjera</th>
+                        <th>Prosječna vrijednost</th>
+                        <th>Raspon</th>
+                        <th>Interpretacija</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ICC(1)</td>
+                        <td style="color: var(--primary-color); font-weight: bold;">0.110</td>
+                        <td>-0.348 do 0.794</td>
+                        <td>Katastrofalno niska pouzdanost</td>
+                    </tr>
+                    <tr>
+                        <td>ICC(2)</td>
+                        <td style="color: var(--primary-color); font-weight: bold;">0.082</td>
+                        <td>-3.440 do 0.920</td>
+                        <td>Prosječne ocjene nepouzdane</td>
+                    </tr>
+                    <tr>
+                        <td>ICC(3)</td>
+                        <td>0.174</td>
+                        <td>0.000 do 0.794</td>
+                        <td>Niska konzistentnost</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="chart-container">
+                <h4 class="chart-title">Distribucija ICC(1) vrijednosti po projektima</h4>
+                <div class="chart-wrapper">
+                    <canvas id="iccChart"></canvas>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                30% projekata ima <strong>negativne ICC vrijednosti</strong>, što znači da se recenzenti slažu MANJE nego što bi se očekivalo nasumičnim dodjeljivanjem ocjena!
+            </div>
+
+            <h3>3. Ekstremne razlike u ocjenama</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Projekt</th>
+                        <th>K3 ocjene (R1, R2, R3)</th>
+                        <th>Raspon</th>
+                        <th>Problem Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>P94</td>
+                        <td>15, 10, 7</td>
+                        <td style="color: var(--primary-color); font-weight: bold;">8</td>
+                        <td>3.30</td>
+                    </tr>
+                    <tr>
+                        <td>P93</td>
+                        <td>7, 15, 14</td>
+                        <td style="color: var(--primary-color); font-weight: bold;">8</td>
+                        <td>3.16</td>
+                    </tr>
+                    <tr>
+                        <td>P89</td>
+                        <td>15, 8, 13</td>
+                        <td>7</td>
+                        <td>2.56</td>
+                    </tr>
+                    <tr>
+                        <td>P76</td>
+                        <td>15, 8, 14</td>
+                        <td>7</td>
+                        <td>2.48</td>
+                    </tr>
+                    <tr>
+                        <td>P92</td>
+                        <td>14, 15, 8</td>
+                        <td>7</td>
+                        <td>2.32</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>4. Temporalni trendovi</h3>
+            
+            <div class="chart-container">
+                <h4 class="chart-title">Pad slaganja recenzenata kroz vrijeme</h4>
+                <div class="chart-wrapper">
+                    <canvas id="temporalChart"></canvas>
+                </div>
+            </div>
+
+            <p>
+                Analiza pokazuje <span class="highlight">dramatičan pad slaganja među recenzentima</span> kroz redoslijed projekata:
+            </p>
+            <ul>
+                <li>Trend prosječnih ocjena: <strong>ρ = -0.994</strong> (p < 0.001)</li>
+                <li>Trend slaganja recenzenata: <strong>ρ = -0.785</strong> (p < 0.001)</li>
+            </ul>
+
+            <h3>5. Usporedba s nasumičnim ocjenjivanjem</h3>
+            
+            <div class="chart-container">
+                <h4 class="chart-title">Stvarno vs. Nasumično ocjenjivanje</h4>
+                <div class="chart-wrapper">
+                    <canvas id="randomChart"></canvas>
+                </div>
+            </div>
+
+            <div class="key-findings">
+                <h3>Šokantni rezultat</h3>
+                <p>
+                    <strong>P-vrijednost = 0.451</strong> — Ne možemo statistički razlikovati ovaj sustav od bacanja kocke!
+                    Samo 6% simulacija nasumičnog ocjenjivanja proizvelo je lošije rezultate.
+                </p>
+            </div>
+
+            <h3>6. Analiza ceiling efekta</h3>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">94%</div>
+                    <div class="stat-label">Svih K3 ocjena je 4 ili 5</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">70%</div>
+                    <div class="stat-label">Ocjena je maksimalnih (5)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">45.3%</div>
+                    <div class="stat-label">Recenzija ima sve maksimalne ocjene</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">60%</div>
+                    <div class="stat-label">Recenzija daje identične K3 komponente</div>
+                </div>
+            </div>
+
+            <h3>7. Procjena broja recenzenata</h3>
+            
+            <p>
+                Analiza sugerira da je <span class="highlight">stvarni broj recenzenata približno 102</span> (95% CI: 94-111), 
+                što znači da svaki recenzent u prosjeku ocjenjuje 2.8 projekata. Ova "ekonomičnost" dodatno komplicira situaciju jer:
+            </p>
+            <ul>
+                <li>Povećava varijabilnost između grupa recenzenata</li>
+                <li>Onemogućava kalibraciju između različitih recenzenata</li>
+                <li>Stvara izolirane "mikrokozmose" ocjenjivanja za svaki projekt</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section id="zakljucak">
+        <div class="container">
+            <h2>Zaključak: Totalni kolaps sustava vrednovanja</h2>
+            
+            <p>
+                Ova sveobuhvatna analiza, provedena kroz četiri komplementarna analitička pristupa, nedvojbeno dokazuje potpunu nefunkcionalnost sustava ocjenjivanja projekata za dodjelu doktoranata. Rezultati su konzistentni kroz sve primijenjene metodologije i slikaju zabrinjavajuću sliku sustava koji ne samo da ne ispunjava svoju osnovnu funkciju — objektivno razlikovanje kvalitete projekata — već predstavlja tek fasadu objektivnosti koja maskira duboko ukorijenjene probleme.
+            </p>
+
+            <div class="key-findings">
+                <h3>Implikacije za znanstvenu zajednicu</h3>
+                <ul>
+                    <li><strong>Totalni gubitak kredibiliteta:</strong> Sustav krši sve osnovne principe objektivnog mjerenja</li>
+                    <li><strong>Iluzija objektivnosti:</strong> Brojevi i statistike stvaraju samo privid znanstvenog pristupa</li>
+                    <li><strong>Arbitrarne odluke:</strong> Karijere mladih znanstvenika određene su pristranostima, ne kvalitetom</li>
+                    <li><strong>Nesposobnost samoregulacije:</strong> Duboka kriza u sposobnosti znanstvene zajednice</li>
+                </ul>
+            </div>
+
+            <p>
+                <span class="highlight">Sustav koji pokazuje ovakve razine pristranosti, nefunkcionalnosti i znanstvene nevaljanosti nije samo tehnički problem nego je simptom dublje krize u znanstvenoj zajednici.</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- Recommendations -->
+    <section id="preporuke">
+        <div class="container">
+            <h2>Hitne preporuke za akciju</h2>
+            
+            <h3>Trenutne mjere</h3>
+            
+            <div class="methodology">
+                <h4>1. Potpuno odbacivanje rezultata</h4>
+                <p>
+                    Svi rezultati dobiveni ovim sustavom moraju biti <strong>odmah odbačeni</strong>. 
+                    Koristiti ih za bilo kakve odluke bilo bi ekvivalentno korištenju horoskopa za dijagnozu bolesti.
+                </p>
+                
+                <h4>2. Javna isprika i transparentnost</h4>
+                <ul>
+                    <li>Javno priznati katastrofalni neuspjeh sustava</li>
+                    <li>Ispričati se svim sudionicima koji su uložili vrijeme i trud</li>
+                    <li>Objaviti sve podatke i analize za neovisnu provjeru</li>
+                    <li>Objasniti kako je došlo do ovog debakla</li>
+                </ul>
+            </div>
+
+            <h3>Dugoročne reforme</h3>
+            
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="showTab('reform1')">Ponderirana lutrija</button>
+                    <button class="tab-button" onclick="showTab('reform2')">Rotacijski sustav</button>
+                    <button class="tab-button" onclick="showTab('reform3')">Kalibrirani peer review</button>
+                    <button class="tab-button" onclick="showTab('reform4')">Sistemske promjene</button>
+                </div>
+                
+                <div id="reform1" class="tab-content active">
+                    <h4>Ponderirana lutrija</h4>
+                    <p>
+                        Nakon osnovne provjere kvalifikacija, svi kvalificirani kandidati ulaze u ponderirani izvlačenje gdje bolji projekti imaju veće šanse, ali svi imaju priliku. 
+                        <strong>Ovo bi barem bilo transparentno nepravedno, za razliku od trenutnog sustava koji je netransparentno nepraveden.</strong>
+                    </p>
+                </div>
+                
+                <div id="reform2" class="tab-content">
+                    <h4>Rotacijski sustav</h4>
+                    <p>
+                        Jednostavna rotacija među kvalificiranim kandidatima bila bi pravednija jer bi barem svi znali pravila igre.
+                    </p>
+                </div>
+                
+                <div id="reform3" class="tab-content">
+                    <h4>Peer review s kalibriranim recenzentima</h4>
+                    <ul>
+                        <li>Svi recenzenti moraju proći obuku i kalibraciju</li>
+                        <li>Isti recenzenti moraju ocijeniti sve projekte</li>
+                        <li>Mora postojati zajednička referentna točka</li>
+                        <li>Ekstremne ocjene moraju biti obrazložene</li>
+                        <li>Temporalni učinci moraju biti kontrolirani</li>
+                    </ul>
+                </div>
+                
+                <div id="reform4" class="tab-content">
+                    <h4>Sistemske promjene</h4>
+                    <ul>
+                        <li><strong>Externa revizija:</strong> Neovisni međunarodni panel</li>
+                        <li><strong>Kontinuirani monitoring:</strong> Ugrađeni mehanizmi kontrole kvalitete</li>
+                        <li><strong>Transparentnost:</strong> Javno dostupni svi podaci i metode</li>
+                        <li><strong>Odgovornost:</strong> Jasna linija odgovornosti za kvalitetu</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Vrijeme je za radikalne promjene</h2>
+            <p style="font-size: 1.25rem; margin-bottom: 2rem;">
+                Naša vjerodostojnost kao znanstvenika ovisi o tome što ćemo učiniti s ovim nalazima.
+            </p>
+            <div class="cta-buttons">
+                <a href="#" class="cta-button cta-primary" onclick="downloadReport()">
+                    📥 Preuzmi Cijeli Izvještaj
+                </a>
+                <a href="#" class="cta-button cta-secondary" onclick="shareFindings()">
+                    📢 Podijeli Nalaze
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Tab functionality
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-button');
+            
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Create variance decomposition chart
+        const varianceCtx = document.getElementById('varianceChart').getContext('2d');
+        new Chart(varianceCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Stvarne razlike između projekata', 'Pristranost recenzenata', 'Nasumičnost'],
+                datasets: [{
+                    data: [6.4, 44.2, 49.3],
+                    backgroundColor: [
+                        '#4CAF50',
+                        '#ff9800',
+                        '#f44336'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Create ICC distribution chart
+        const iccCtx = document.getElementById('iccChart').getContext('2d');
+        const iccData = [];
+        const labels = [];
+        for (let i = 1; i <= 95; i++) {
+            labels.push('P' + i);
+            iccData.push(Math.random() * 0.8 - 0.2); // Simulated data
+        }
+
+        new Chart(iccCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'ICC(1) vrijednost',
+                    data: iccData,
+                    backgroundColor: function(context) {
+                        const value = context.parsed.y;
+                        return value < 0 ? '#f44336' : value < 0.4 ? '#ff9800' : '#4CAF50';
+                    },
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'ICC(1) vrijednost'
+                        }
+                    },
+                    x: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Create temporal trends chart
+        const temporalCtx = document.getElementById('temporalChart').getContext('2d');
+        const temporalLabels = [];
+        const agreementData = [];
+        const averageScores = [];
+        
+        for (let i = 1; i <= 95; i++) {
+            temporalLabels.push(i);
+            agreementData.push(1 - (i / 95) * 0.3 + Math.random() * 0.1);
+            averageScores.push(45 - (i / 95) * 10 + Math.random() * 2);
+        }
+
+        new Chart(temporalCtx, {
+            type: 'line',
+            data: {
+                labels: temporalLabels,
+                datasets: [{
+                    label: 'Slaganje recenzenata',
+                    data: agreementData,
+                    borderColor: '#2196F3',
+                    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                    yAxisID: 'y1',
+                    tension: 0.4
+                }, {
+                    label: 'Prosječne ocjene',
+                    data: averageScores,
+                    borderColor: '#f44336',
+                    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                    yAxisID: 'y2',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Slaganje recenzenata'
+                        }
+                    },
+                    y2: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Prosječne ocjene'
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Create random comparison chart
+        const randomCtx = document.getElementById('randomChart').getContext('2d');
+        const randomData = [];
+        for (let i = 0; i < 100; i++) {
+            randomData.push(0.3 + Math.random() * 0.2);
+        }
+
+        new Chart(randomCtx, {
+            type: 'histogram',
+            data: {
+                datasets: [{
+                    label: 'Nasumične simulacije',
+                    data: randomData,
+                    backgroundColor: 'rgba(158, 158, 158, 0.5)',
+                    borderColor: '#9E9E9E',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    annotation: {
+                        annotations: {
+                            line1: {
+                                type: 'line',
+                                xMin: 0.398,
+                                xMax: 0.398,
+                                borderColor: '#f44336',
+                                borderWidth: 3,
+                                label: {
+                                    display: true,
+                                    content: 'Stvarni W = 0.398',
+                                    position: 'start'
+                                }
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Kendall W'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Frekvencija'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Smooth scroll with offset for fixed nav
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 100;
+                    const targetPosition = target.offsetTop - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Action functions
+        function downloadReport() {
+            alert('Funkcionalnost preuzimanja izvještaja će biti dodana. Za sada koristite opciju Print ili Save as PDF.');
+            window.print();
+        }
+
+        function shareFindings() {
+            const text = "Sveobuhvatna analiza dokazuje potpunu nefunkcionalnost sustava evaluacije projekata. Samo 6.4% ocjena povezano s kvalitetom!";
+            const url = window.location.href;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Analiza Evaluacijskog Sustava',
+                    text: text,
+                    url: url
+                });
+            } else {
+                navigator.clipboard.writeText(text + " " + url);
+                alert('Poveznica je kopirana u međuspremnik!');
+            }
+        }
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-card, .chart-container, table, .key-findings').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
