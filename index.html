@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sveobuhvatna analiza pristranosti u sustavu evaluacije projekata</title>
+    <title>Sveobuhvatna analiza pristranosti u sustavu evaluacije projekata (mentora)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * {
@@ -53,16 +53,45 @@
             align-items: center;
         }
 
+
+
         .nav-logo {
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary-color);
         }
 
+        .nav-pdf-button {
+            background: var(--primary-color);
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .nav-pdf-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .nav-pdf-button::after {
+            display: none !important;
+        }
+
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
             list-style: none;
+            align-items: center;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-links a {
@@ -398,7 +427,7 @@
 
         /* Call to Action */
         .cta-section {
-            background: var(--primary-color);
+            background: #1e3a8a; /* var(--primary-color); */
             color: white;
             padding: 4rem 2rem;
             text-align: center;
@@ -408,6 +437,7 @@
         .cta-section h2 {
             color: white;
             margin-bottom: 2rem;
+            /*display: none;*/
         }
 
         .cta-section h2::after {
@@ -479,8 +509,31 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-container > div:last-child {
+                flex-direction: column;
+                width: 100%;
+                gap: 1rem;
+                margin-left: 0;
+            }
+
             .nav-links {
                 display: none;
+            }
+            
+            .nav-separator {
+                display: none;
+            }
+            
+            .nav-pdf-button {
+                width: 100%;
+                justify-content: center;
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
             }
             
             .stats-grid {
@@ -559,6 +612,48 @@
             content: '⚠️';
             font-size: 1.5rem;
         }
+
+/* CTA naslov - bijela boja i centrirana crta */
+.cta-section h2 {
+    color: white !important;
+    text-align: center;
+    position: relative;
+}
+
+.cta-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -15px; /* razmak ispod teksta */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px; /* duljina crte */
+    height: 4px;
+    background: white;
+    border-radius: 2px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        ž
     </style>
 </head>
 <body>
@@ -566,20 +661,26 @@
     <nav>
         <div class="nav-container">
             <div class="nav-logo">Analiza evaluacijskog sustava HRZZ-a</div>
-            <ul class="nav-links">
-                <li><a href="#uvod">Uvod</a></li>
-                <li><a href="#metodologija">Metodologija</a></li>
-                <li><a href="#rezultati">Rezultati</a></li>
-                <li><a href="#zakljucak">Zaključak</a></li>
-                <li><a href="#preporuke">Preporuke</a></li>
-            </ul>
+            <div style="display: flex; align-items: center; gap: 1rem; margin-left: 2rem;">
+                <a href="Analiza_sustava_evaluacije_DOK_2025_02.pdf" class="nav-pdf-button" download>
+                    📥 Preuzmi cijelu analizu
+                </a>
+                <div class="nav-separator" style="width: 2px; height: 24px; background: #e0e0e0; margin: 0 0.5rem;"></div>
+                <ul class="nav-links" style="margin: 0;">
+                    <li><a href="#uvod">Uvod</a></li>
+                    <li><a href="#metodologija">Metodologija</a></li>
+                    <li><a href="#rezultati">Rezultati</a></li>
+                    <li><a href="#zakljucak">Zaključak</a></li>
+                    <li><a href="#preporuke">Preporuke</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Sveobuhvatna analiza pristranosti u sustavu ocjenjivanja projekata u znanstvenom području "Prirodne znanosti"</h1>
+            <h1>Sveobuhvatna analiza pristranosti u sustavu ocjenjivanja projekata (mentora) u znanstvenom području "Prirodne znanosti"</h1>
             <p class="subtitle" style="margin-bottom: 1rem;">
                 <strong>Znanstveni dokazi potpune nefunkcionalnosti evaluacijskog sustava za dodjelu doktoranata</strong>
             </p>
@@ -587,8 +688,11 @@
                 <strong>Projekt razvoja karijera mladih istraživača (DOK-2025-02)</strong>
             </p>
             <div class="key-finding">
-                Samo 6.4% varijance u ocjenama povezano je sa stvarnom kvalitetom projekata
+                Samo 6.4% varijance u ocjenama povezano je sa stvarnom kvalitetom projekata (mentora)
             </div>
+<p class="subtitle" style="margin-top: 1rem; font-size: 1.25rem;">
+    <strong>Na ovoj stranici je samo dio analize, a cijelu možete skinuti pomoću <a href="Analiza_sustava_evaluacije_DOK_2025_02.pdf" download>poveznice</a> ili pritiskom na gumb u zaglavlju ili na kraju stranice</strong>
+</p>
         </div>
     </section>
 
@@ -598,16 +702,16 @@
             <div class="abstract">
                 <h3>Sažetak</h3>
                 <p>
-                    Ovaj dokument predstavlja konsolidiranu analizu sustava ocjenjivanja projekata za dodjelu doktoranata koja nedvojbeno dokazuje potpunu nefunkcionalnost, pristranost i znanstvenu nevaljanost primijenjenog evaluacijskog postupka. Kroz tri komplementarna analitička pristupa — klasičnu statističku analizu, napredne statističke metode i Bayesovu analizu — dokazali smo kako sustav ne samo da ne mjeri kvalitetu projekata, već predstavlja tek simulaciju objektivnosti koja dovodi do arbitrarnih i nepravednih odluka.
+                    Na ovoj stranici prikizani su dijelovi konsolidirane analize sustava ocjenjivanja projekata (mentora) za dodjelu doktoranata koja nedvojbeno dokazuje potpunu nefunkcionalnost, pristranost i znanstvenu nevaljanost primijenjenog evaluacijskog postupka. Kroz tri komplementarna analitička pristupa — klasičnu statističku analizu, napredne statističke metode i Bayesovu analizu — dokazali smo kako sustav ne samo da ne mjeri kvalitetu projekata, već predstavlja tek simulaciju objektivnosti koja dovodi do arbitrarnih i nepravednih odluka.
                 </p>
                 <p>
-                    <strong>Rezultati pokazuju da samo 6.4% varijance u ocjenama proizlazi iz stvarnih razlika između projekata, dok ostatak čine subjektivnost recenzenata i nasumični čimbenici.</strong> Sustav se statistički ne razlikuje od nasumičnog ocjenjivanja (p = 0.451), što ga čini potpuno beskorisnim za namijenjenu svrhu.
+                    <strong>Rezultati pokazuju da samo 6.4% varijance u ocjenama proizlazi iz stvarnih razlika između projekata (mentora), dok ostatak čine subjektivnost recenzenata i nasumični čimbenici.</strong> Sustav se statistički ne razlikuje od nasumičnog ocjenjivanja (p = 0.451), što ga čini potpuno beskorisnim za namijenjenu svrhu.
                 </p>
             </div>
 
-            <h2>Kontekst i Motivacija</h2>
+            <h2>Kontekst i motivacija</h2>
             <p>
-                Sustav vrednovanja znanstvenih projekata trebao bi predstavljati temelj pravedne i objektivne raspodjele resursa u akademskoj zajednici. U kontekstu dodjele doktoranata, takav sustav ima dalekosežne posljedice na karijere mladih istraživača i budućnost znanstvenih istraživanja. Stoga je ključno da takav sustav bude utemeljen na čvrstim znanstvenim principima, objektivnosti i transparentnosti.
+                Sustav vrednovanja znanstvenih projekata i mentora trebao bi predstavljati temelj pravedne i objektivne raspodjele resursa u akademskoj zajednici. U kontekstu dodjele doktoranata, takav sustav ima dalekosežne posljedice na karijere mladih istraživača i budućnost znanstvenih istraživanja. Stoga je ključno da takav sustav bude utemeljen na čvrstim znanstvenim principima, objektivnosti i transparentnosti.
             </p>
 
             <div class="warning-box">
@@ -623,13 +727,13 @@
             
             <h3>Opis podatkovnog skupa</h3>
             <p>
-                Analiza je provedena na kompletnom skupu podataka evaluacije projekata prijavljenih za natječaj "Projekt razvoja karijera mladih istraživača — Izobrazba novih doktora znanosti (DOK-2025-02)" u području prirodnih znanosti.
+                Analiza je provedena na kompletnom skupu podataka evaluacije projekata (mentora) prijavljenih za natječaj "Projekt razvoja karijera mladih istraživača — Izobrazba novih doktora znanosti (DOK-2025-02)" u području prirodnih znanosti.
             </p>
 
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-value">95</div>
-                    <div class="stat-label">Projekata ocjenjivano</div>
+                    <div class="stat-label">Projekata (mentora) ocjenjivano</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">285</div>
@@ -637,7 +741,7 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">3</div>
-                    <div class="stat-label">Recenzenta po projektu</div>
+                    <div class="stat-label">Recenzenta po projektu (teoretski)</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">9</div>
@@ -723,7 +827,7 @@
             <div class="key-findings">
                 <h3>Najstrašniji nalaz cijele analize</h3>
                 <ul>
-                    <li><strong>6.4%</strong> varijance povezano sa stvarnim razlikama između projekata</li>
+                    <li><strong>6.4%</strong> varijance povezano sa stvarnim razlikama između projekata (mentora)</li>
                     <li><strong>44.2%</strong> varijance zbog pristranosti grupa recenzenata</li>
                     <li><strong>49.3%</strong> varijance je čista nasumičnost</li>
                 </ul>
@@ -737,7 +841,7 @@
             </div>
 
             <p>
-                <span class="highlight">93.6% varijance nema apsolutno nikakve veze s kvalitetom evaluiranih projekata.</span> 
+                <span class="highlight">93.6% varijance nema apsolutno nikakve veze s kvalitetom evaluiranih projekata (mentora).</span> 
                 Zamislite situaciju u kojoj mjerite temperaturu termometrom koji 94% vremena pokazuje nasumične vrijednosti koje nemaju veze sa stvarnom temperaturom. Takav termometar ne samo što je beskoristan već je i opasan jer stvara iluziju mjerenja.
             </p>
 
@@ -782,7 +886,7 @@
             </div>
 
             <div class="warning-box">
-                30% projekata ima <strong>negativne ICC vrijednosti</strong>, što znači kako se recenzenti slažu MANJE nego što bi se očekivalo nasumičnim dodjeljivanjem ocjena!
+                30% projekata (mentora) ima <strong>negativne ICC vrijednosti</strong>, što znači kako se recenzenti slažu MANJE nego što bi se očekivalo nasumičnim dodjeljivanjem ocjena!
             </div>
 
             <h3>3. Ekstremne razlike u ocjenama</h3>
@@ -840,7 +944,7 @@
             </div>
 
             <p>
-                Analiza pokazuje <span class="highlight">dramatičan pad slaganja među recenzentima</span> kroz redoslijed projekata:
+                Analiza pokazuje <span class="highlight">dramatičan pad slaganja među recenzentima</span> kroz redoslijed projekata (mentora):
             </p>
             <ul>
                 <li>Trend prosječnih ocjena: <strong>ρ = -0.994</strong> (p < 0.001)</li>
@@ -901,8 +1005,8 @@
             <h3>8. Procjena broja recenzenata</h3>
             
             <p>
-                95 prijavljenih projekata za znansteno područje "Prirodne znanosti" bi značilo 285 potrebnih recenzenata ako bi svaki projekt recenzirala 3 recenzenta. Naša analiza sugerira kako je <span class="highlight">stvarni broj recenzenata bio približno 102</span> (95% CI: 94-111), do maksimalno oko 158, 
-                što znači kako je svaki recenzent u prosjeku ocijenio 2.8 projekata. Ova "ekonomičnost" dodatno komplicira situaciju jer:
+                95 prijavljenih projekata (mentora) za znansteno područje "Prirodne znanosti" bi značilo 285 potrebnih recenzenata ako bi svaki projekt recenzirala 3 recenzenta. Naša analiza sugerira kako je <span class="highlight">stvarni broj recenzenata bio približno 102</span> (95% CI: 94-111), do maksimalno oko 158, 
+                što znači kako je svaki recenzent u prosjeku ocijenio 1-8 do 2.8 projekata (mentora). Ova "ekonomičnost" dodatno komplicira situaciju jer:
             </p>
             <ul>
                 <li>Povećava varijabilnost između grupa recenzenata</li>
@@ -934,7 +1038,7 @@
             <h2>Zaključak: Totalni kolaps sustava vrednovanja</h2>
             
             <p>
-                Ova sveobuhvatna analiza, provedena kroz četiri komplementarna analitička pristupa, nedvojbeno dokazuje potpunu nefunkcionalnost sustava ocjenjivanja projekata za dodjelu doktoranata. Rezultati su konzistentni kroz sve primijenjene metodologije i slikaju zabrinjavajuću sliku sustava koji ne samo da ne ispunjava svoju osnovnu funkciju — objektivno razlikovanje kvalitete projekata — već predstavlja tek fasadu objektivnosti koja maskira duboko ukorijenjene probleme.
+                Ova sveobuhvatna analiza, provedena kroz četiri komplementarna analitička pristupa, nedvojbeno dokazuje potpunu nefunkcionalnost sustava ocjenjivanja projekata (mentora) za dodjelu doktoranata. Rezultati su konzistentni kroz sve primijenjene metodologije i slikaju zabrinjavajuću sliku sustava koji ne samo da ne ispunjava svoju osnovnu funkciju — objektivno razlikovanje kvalitete projekata — već predstavlja tek fasadu objektivnosti koja maskira duboko ukorijenjene probleme.
             </p>
 
             <div class="key-findings">
@@ -961,18 +1065,19 @@
             <h3>Trenutne mjere</h3>
             
             <div class="methodology">
-                <h4>1. Potpuno odbacivanje rezultata</h4>
+                <h4>1. Potpuno odbacivanje rezultata i financiranje SVIH zaprimljenih prijedloga</h4>
                 <p>
-                    Svi rezultati dobiveni ovim sustavom moraju biti <strong>odmah odbačeni</strong>. 
-                    Koristiti ih za bilo kakve odluke bilo bi ekvivalentno korištenju horoskopa za dijagnozu bolesti.
+                    Svi rezultati dobiveni ovim sustavom moraju biti <strong>odmah odbačeni</strong>, te se mora iznaći način za dodjelu doktoranata <strong>svim</strong> predloženim mentorima tj. projektima. 
+                    <strong></strong>Koristiti ove rezultate za bilo kakve odluke bilo bi ekvivalentno korištenju horoskopa za dijagnozu bolesti.
                 </p>
                 
                 <h4>2. Javna isprika i transparentnost</h4>
                 <ul>
                     <li>Javno priznati katastrofalni neuspjeh sustava</li>
                     <li>Ispričati se svim sudionicima koji su uložili vrijeme i trud</li>
-                    <li>Objaviti sve podatke i analize za neovisnu provjeru</li>
+                    <li>Objaviti sve podatke i analize za dodatne neovisne provjere</li>
                     <li>Objasniti kako je došlo do ovog debakla</li>
+                    <li>Dodjeliti doktorante svim predloženim projektima tj. mentorima</li>
                 </ul>
             </div>
 
@@ -1029,9 +1134,10 @@
     <section class="cta-section">
         <div class="container">
             <h2>Vrijeme je za radikalne promjene</h2>
-            <p style="font-size: 1.25rem; margin-bottom: 2rem;">
-                Naša vjerodostojnost kao znanstvenika ovisi o tome što ćemo učiniti s ovim nalazima.
-            </p>
+<p style="font-size: 1.25rem; margin-bottom: 2rem; color: white;">
+    Naša vjerodostojnost kao znanstvenika ovisi o tome što ćemo učiniti s ovim nalazima.
+</p>
+
             <div class="cta-buttons">
                 <a href="Analiza_sustava_evaluacije_DOK_2025_02.pdf" class="cta-button cta-primary" download>
                 📥 Preuzmi cijelu analizu
@@ -1066,7 +1172,7 @@
         new Chart(varianceCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Stvarne razlike između projekata', 'Pristranost recenzenata', 'Nasumičnost'],
+                labels: ['Stvarne razlike između projekata (mentora)', 'Pristranost recenzenata', 'Nasumičnost'],
                 datasets: [{
                     data: [6.4, 44.2, 49.3],
                     backgroundColor: [
